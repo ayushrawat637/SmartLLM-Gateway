@@ -1,11 +1,16 @@
 from fastapi import FastAPI
+from dotenv import load_dotenv
+import os
 
-app = FastAPI(title="SmartLLM Gateway")
+load_dotenv()
+app_name = os.getenv("APP_NAME")
+
+app = FastAPI(title=app_name)
 
 
-@app.get("/")
-def home():
-    return {"message": "SmartLLM Gateway is running!"}
+@app.get("/config")
+def get_config():
+    return {"app_name": app_name}
 
 
 @app.get("/health")
