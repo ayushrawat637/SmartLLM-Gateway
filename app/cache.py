@@ -3,7 +3,8 @@ from app.embeddings import generate_embedding
 
 cache = []
 
-SIMILARITY_THRESHOLD = 0.80
+SIMILARITY_THRESHOLD = 0.75
+
 
 def add_to_cache(question: str, answer: str):
     embedding = generate_embedding(question)
@@ -14,7 +15,7 @@ def add_to_cache(question: str, answer: str):
         "answer": answer
     })
 
-    
+
 def search_cache(question: str):
     query_embedding = generate_embedding(question)
     best_match = None
@@ -28,7 +29,13 @@ def search_cache(question: str):
             * np.linalg.norm(item["embedding"])
         )
 
-        if similarity >= SIMILARITY_THRESHOLD:
-            return item["answer"]
+        print("Similarity score:", similarity)
+
+        if similarity > best_similarity:
+            best_similarity = similarity
+            best_match = item
+
+    if best_match is not None:
+        return best_match["answer"]
 
     return None
