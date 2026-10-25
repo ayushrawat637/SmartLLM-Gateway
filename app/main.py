@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 import os
 from app.cache import add_to_cache, search_cache
 from pydantic import BaseModel, Field, field_validator
+from app.llm import generate_answer
 
 load_dotenv()
 app_name = os.getenv("APP_NAME")
@@ -61,6 +62,7 @@ def health_check():
     return {"status": "healthy"}
 
 
+
 @app.post("/cache")
 def check_cache(request: QuestionRequest):
     cached_answer = search_cache(request.question)
@@ -71,10 +73,15 @@ def check_cache(request: QuestionRequest):
             "answer": cached_answer
         }
 
+    answer = generate_answer(request.question)
+
+    add_to_cache(request.question, answer)
+
     return {
         "cached": False,
-        "message": "No cached answer found."
+        "answer": answer
     }
+
 
 
 @app.post("/cache/add")
