@@ -559,3 +559,75 @@ footer span {
         flex-direction: column;
     }
 }
+
+/* Slightly larger highlighted and emphasized text */
+strong,
+b,
+mark,
+.metric-value,
+.stat-value {
+    font-size: 1.08em;
+}
+
+/* Improved emphasis and readability */
+h1 {
+    font-size: 2.4rem;
+}
+
+h2 {
+    font-size: 1.5rem;
+}
+
+.metric-card h3 {
+    font-size: 1.15rem;
+}
+
+.metric-card .metric-value,
+.metric-card .value,
+.metric-card strong {
+    font-size: 2.2rem;
+}
+
+.model-row strong,
+.model-usage strong {
+    font-size: 1.1rem;
+}
+
+.badge,
+.status-badge {
+    font-size: 0.95rem;
+}
+
+/* Larger, more readable Question Playground */
+.playground h2 {
+    font-size: 1.65rem;
+}
+
+.playground p {
+    font-size: 1.05rem;
+}
+
+.playground label {
+    font-size: 1.1rem;
+}
+
+.playground textarea {
+    font-size: 1.1rem;
+}
+
+.playground button {
+    font-size: 1.05rem;
+}
+
+.playground .answer-meta,
+.playground .helper-text {
+    font-size: 1rem;
+}
+
+/* Keep these Question Playground elements at normal size */
+.playground > p,
+.playground label,
+.playground textarea,
+.playground button {
+    font-size: initial;
+}
