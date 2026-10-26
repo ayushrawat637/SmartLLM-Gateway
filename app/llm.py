@@ -3,6 +3,7 @@ import os
 from dotenv import load_dotenv
 from google import genai
 from google.genai import errors
+from app.metrics import increment_metric
 
 load_dotenv()
 
@@ -60,6 +61,7 @@ def select_model(question: str) -> str:
     return LIGHTWEIGHT_MODEL
 
 
+
 def generate_answer(question: str) -> str:
     """
     Generate an answer using the selected model.
@@ -69,6 +71,11 @@ def generate_answer(question: str) -> str:
     or a rate-limit error (429).
     """
     model = select_model(question)
+
+    if model == ADVANCED_MODEL:
+        increment_metric("advanced_model_requests")
+    else:
+        increment_metric("lightweight_model_requests")
 
     try:
         response = client.models.generate_content(
@@ -95,6 +102,9 @@ def generate_answer(question: str) -> str:
         if not should_fallback:
             raise
 
+        increment_metric("fallback_events")
+        increment_metric("lightweight_model_requests")
+
         response = client.models.generate_content(
             model=LIGHTWEIGHT_MODEL,
             contents=question
@@ -104,3 +114,4 @@ def generate_answer(question: str) -> str:
         raise ValueError("Gemini returned an empty response")
 
     return response.text
+

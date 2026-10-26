@@ -4,6 +4,7 @@ import os
 from app.cache import add_to_cache, search_cache
 from pydantic import BaseModel, Field, field_validator
 from app.llm import generate_answer
+from app.metrics import increment_metric, get_metrics
 
 load_dotenv()
 app_name = os.getenv("APP_NAME")
@@ -61,6 +62,9 @@ def get_config():
 def health_check():
     return {"status": "healthy"}
 
+@app.get("/metrics")
+def metrics_endpoint():
+    return get_metrics()
 
 
 @app.post("/cache")
@@ -68,10 +72,14 @@ def check_cache(request: QuestionRequest):
     cached_answer = search_cache(request.question)
 
     if cached_answer is not None:
+        increment_metric("cache_hits")
+
         return {
             "cached": True,
             "answer": cached_answer
         }
+
+    increment_metric("cache_misses")
 
     answer = generate_answer(request.question)
 
@@ -81,6 +89,7 @@ def check_cache(request: QuestionRequest):
         "cached": False,
         "answer": answer
     }
+
 
 
 
