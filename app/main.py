@@ -5,12 +5,20 @@ from app.cache import add_to_cache, search_cache
 from pydantic import BaseModel, Field, field_validator
 from app.llm import generate_answer
 from app.metrics import increment_metric, get_metrics
+from fastapi.responses import FileResponse
+from pathlib import Path
+from fastapi.staticfiles import StaticFiles
+FRONTEND_DIR = Path(__file__).resolve().parent.parent / "frontend"
 
 load_dotenv()
 app_name = os.getenv("APP_NAME")
 
 app = FastAPI(title=app_name)
-
+app.mount(
+    "/static",
+    StaticFiles(directory=FRONTEND_DIR),
+    name="static"
+)
 
 class QuestionRequest(BaseModel):
     question: str = Field(min_length=1)
@@ -48,9 +56,9 @@ class CacheEntryRequest(BaseModel):
         return value
 
 
-@app.get("/")
-def home():
-    return {"message": f"{app_name} is running!"}
+@app.get("/", include_in_schema=False)
+def dashboard():
+    return FileResponse(FRONTEND_DIR / "index.html")
 
 
 @app.get("/config")
@@ -89,8 +97,6 @@ def check_cache(request: QuestionRequest):
         "cached": False,
         "answer": answer
     }
-
-
 
 
 @app.post("/cache/add")

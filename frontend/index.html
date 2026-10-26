@@ -1,0 +1,166 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartLLM Gateway</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="app">
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-icon">S</div>
+                <div>
+                    <h2>SmartLLM</h2>
+                    <p>Gateway</p>
+                </div>
+            </div>
+
+            <p class="nav-label">WORKSPACE</p>
+            <nav>
+                <a href="#overview" class="nav-link active">Overview</a>
+                <a href="#playground" class="nav-link">Playground</a>
+                <a href="#models" class="nav-link">Model Usage</a>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <span class="status-dot"></span>
+                <span>Gateway Dashboard</span>
+            </div>
+        </aside>
+
+        <main class="main-content" id="overview">
+            <header class="topbar">
+                <div>
+                    <p class="eyebrow">DEVELOPER CONSOLE</p>
+                    <h1>Overview</h1>
+                    <p class="subtitle">Monitor your intelligent LLM gateway.</p>
+                </div>
+                <div class="api-status">
+                    <span class="status-dot"></span>
+                    <span id="api-status-text">Checking API...</span>
+                </div>
+            </header>
+
+            <section class="metrics-grid">
+                <article class="metric-card">
+                    <p>Cache Hits</p>
+                    <h2 id="cache-hits">—</h2>
+                    <span class="metric-note">Reused cached answers</span>
+                </article>
+
+                <article class="metric-card">
+                    <p>Cache Misses</p>
+                    <h2 id="cache-misses">—</h2>
+                    <span class="metric-note">Questions needing generation</span>
+                </article>
+
+                <article class="metric-card">
+                    <p>Model Requests</p>
+                    <h2 id="model-requests">—</h2>
+                    <span class="metric-note">Lightweight + advanced</span>
+                </article>
+
+                <article class="metric-card">
+                    <p>Fallback Events</p>
+                    <h2 id="fallback-events">—</h2>
+                    <span class="metric-note">Recovery attempts recorded</span>
+                </article>
+            </section>
+
+            <section class="content-grid" id="models">
+                <article class="panel">
+                    <div class="panel-heading">
+                        <div>
+                            <h2>Model Usage</h2>
+                            <p>Request distribution by model tier</p>
+                        </div>
+                        <span class="live-badge">LIVE METRICS</span>
+                    </div>
+
+                    <div class="model-row">
+                        <div class="model-icon lightweight-icon">L</div>
+                        <div class="model-info">
+                            <strong>Lightweight Model</strong>
+                            <span>Fast, everyday queries</span>
+                        </div>
+                        <strong id="lightweight-requests">0</strong>
+                    </div>
+
+                    <div class="model-row">
+                        <div class="model-icon advanced-icon">A</div>
+                        <div class="model-info">
+                            <strong>Advanced Model</strong>
+                            <span>Complex queries</span>
+                        </div>
+                        <strong id="advanced-requests">0</strong>
+                    </div>
+                </article>
+
+                <article class="panel">
+                    <div class="panel-heading">
+                        <div>
+                            <h2>Cache Performance</h2>
+                            <p>Based on recorded requests</p>
+                        </div>
+                    </div>
+
+                    <div class="cache-chart">
+                        <div class="cache-ring" id="cache-ring">
+                            <div class="cache-ring-inner">
+                                <strong id="cache-rate">0%</strong>
+                                <span>Hit rate</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p class="chart-caption" id="cache-summary">
+                        Waiting for metrics...
+                    </p>
+                </article>
+            </section>
+
+            <section class="panel playground" id="playground">
+                <div class="panel-heading">
+                    <div>
+                        <h2>Question Playground</h2>
+                        <p>Send a question through your gateway.</p>
+                    </div>
+                    <span class="playground-tag">POST /cache</span>
+                </div>
+
+                <form id="question-form">
+                    <label for="question">Your question</label>
+                    <textarea
+                        id="question"
+                        placeholder="Ask something, e.g. Explain binary search..."
+                        required
+                    ></textarea>
+                    <div class="form-footer">
+                        <span>Requests are processed by your FastAPI backend.</span>
+                        <button type="submit" id="ask-button">
+                            Send question
+                        </button>
+                    </div>
+                </form>
+
+                <div id="answer-panel" class="answer-panel" hidden>
+                    <h3>Gateway Response</h3>
+                    <p id="answer-text"></p>
+                    <div id="answer-meta" class="answer-meta"></div>
+                </div>
+            </section>
+
+            <footer>
+                SmartLLM Gateway <span>·</span> Local development dashboard
+            </footer>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
+    <script src="/static/script.js"></script>
+</body>
+</html>
